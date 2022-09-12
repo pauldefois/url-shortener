@@ -2,15 +2,22 @@ package de.dkb.codingchallenge.urlshortener.db.model
 
 import java.time.LocalDateTime
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.persistence.Table
 
 @Entity
-data class UrlShortenedEntity(
+@Table(name = "url")
+class UrlShortenedEntity(
 
     @Id
-    var id: String?,
+    @GeneratedValue(generator = "URL_SEQ_ID", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "URL_SEQ_ID", initialValue = 1, allocationSize = 10)
+    var id: Long?,
 
-    var url: String,
-    var hash: String,
-    var creationDateTime: LocalDateTime,
+    val url: String,
+    val hash: String,
+    val creationDateTime: LocalDateTime
 )

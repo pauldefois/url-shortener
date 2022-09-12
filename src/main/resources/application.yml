@@ -1,0 +1,23 @@
+spring:
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 1.0
+    table: schema_version
+    validate-on-migrate: true
+    validate-migration-naming: true
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=url-shortner
+    driver-class-name: 'org.postgresql.Driver'
+    username: 'root'
+    password: 'root'
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
