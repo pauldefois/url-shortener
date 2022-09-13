@@ -17,11 +17,11 @@ class UrlShortenerApiModelConverter {
     fun convertToApiUrlShortened(url: UrlShortened, request: HttpServletRequest): ApiUrlShortened =
         ApiUrlShortened(
             url.url,
-            getFullAppUri(request),
+            getFullAppUri(request, url.hash),
             url.hash,
             url.creationDateTime
         )
 
-    private fun getFullAppUri(request: HttpServletRequest): String =
-        ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build().toUriString()
+    private fun getFullAppUri(request: HttpServletRequest, hash: String): String =
+        ServletUriComponentsBuilder.fromRequestUri(request).replacePath(hash).build().toUriString()
 }

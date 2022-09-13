@@ -1,0 +1,8 @@
+embedded:
+  postgresql:
+    enabled: true
+    reuseContainer: true
+    dockerImage: 'postgres:13-alpine'
+    database: 'integration-test'
+    user: 'it-user'
+    password: 'secret!password'

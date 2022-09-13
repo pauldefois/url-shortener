@@ -22,6 +22,17 @@ class DefaultUrlShortenerService(
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackForClassName = ["java.lang.Throwable"])
     override fun shortenUrl(url: UrlDto): UrlShortened {
         val hash = getAndCheckCustomisedHash(url.customisedHash) ?: urlHashingService.hashUrl(url.url)
+
+        val existingUrl = repository.findByHash(hash)
+
+        if (existingUrl.isPresent) {
+            if (url.customisedHash != null) {
+                throw IllegalArgumentException("The customised hash already exists")
+            } else {
+                return modelConverter.convertToUrlShortened(existingUrl.get())
+            }
+        }
+
         return repository.save(
             UrlShortenedEntity(
                 null,
@@ -35,12 +46,8 @@ class DefaultUrlShortenerService(
     }
 
     private fun getAndCheckCustomisedHash(customisedHash: String?): String? {
-        if (customisedHash != null) {
-            if (customisedHash.isBlank()) {
-                throw IllegalArgumentException("The customised hash is empty")
-            } else if (repository.findByHash(customisedHash).isPresent) {
-                throw IllegalArgumentException("The customised hash already exists")
-            }
+        if (customisedHash != null && customisedHash.isBlank()) {
+            throw IllegalArgumentException("The customised hash is empty")
         }
         return customisedHash
     }
